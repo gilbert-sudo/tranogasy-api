@@ -3,6 +3,7 @@ const City = require("../models/city");
 const Feature = require("../models/feature");
 const Image = require("../models/image");
 const Counter = require("../models/Counter");
+const mongoose = require('mongoose');
 
 // Get all properties
 const getProperties = async (req, res) => {
@@ -35,22 +36,12 @@ const getProperty = async (req, res) => {
 
 // Create a new property
 const createProperty = async (req, res) => {
-  const property = new Property({
-    title: req.body.title,
-    description: req.body.description,
-    address: req.body.address,
-    city: req.body.city,
-    price: req.body.price,
-    rent: req.body.rent,
-    bedrooms: req.body.bedrooms,
-    bathrooms: req.body.bathrooms,
-    area: req.body.area,
-    propertyNumber: 0
-  });
+
+  const { title, description, address, city, price, rent, bedrooms, bathrooms, area } = req.body
+  const property = new Property({ title, description, address, city, price, rent, bedrooms, bathrooms, area, propertyNumber: 0 });
 
   try {
     const savedProperty = await property.save();
-    console.log(savedProperty._id);
     var lastValue;
 
     const lastCounter = await Counter.find().sort({ _id: -1 }).limit(1);
@@ -122,12 +113,16 @@ const updateProperty = async (req, res) => {
 // Delete a property
 const deleteProperty = async (req, res) => {
   try {
-    const property = await Property.findById(req.params.id);
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({error: 'No such property'})
+    }
+    const property = await Property.findOneAndDelete({ _id: req.params.id});
     if (!property) {
       return res.status(404).json({ message: "Property not found" });
     }
-    await property.remove();
-    res.json({ message: "Property deleted" });
+    const property_counter = await Counter.findOneAndDelete({ propertyId: req.params.id });
+
+    res.status(200).json({ message: "Property deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
