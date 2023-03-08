@@ -1,5 +1,4 @@
 const Property = require("../models/property");
-const City = require("../models/city");
 const Feature = require("../models/feature");
 const Image = require("../models/image");
 const Counter = require("../models/Counter");
