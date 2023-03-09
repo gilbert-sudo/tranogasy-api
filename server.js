@@ -19,6 +19,7 @@ app.use(express.json());
 app.use("/", require("./routes/roots"));
 app.use('/api/properties', require('./routes/propertyRoutes'))
 app.use('/api/cities', require('./routes/cityRoutes'))
+app.use('/api/imagies', require('./routes/imageRoutes'))
 
 //run and log the connection
 mongoose.connection.once("open", () => {

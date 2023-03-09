@@ -1,4 +1,3 @@
-// Property model
 const mongoose = require('mongoose');
 
 const propertySchema = new mongoose.Schema({
@@ -14,9 +13,10 @@ const propertySchema = new mongoose.Schema({
   propertyNumber: { type: Number, required: true },
   features: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Feature' }],
   images: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Image' }],
+  type: { type: String, enum: ['sale', 'rent'], required: true },
+  status: { type: String, enum: ['available', 'unavailable'], required: true },
   created_at: { type: Date, default: Date.now },
   updated_at: { type: Date, default: Date.now }
 });
 
-
-module.exports = mongoose.model('Property', propertySchema); 
+module.exports = mongoose.model('Property', propertySchema);

@@ -36,8 +36,8 @@ const getProperty = async (req, res) => {
 // Create a new property
 const createProperty = async (req, res) => {
 
-  const { title, description, address, city, price, rent, bedrooms, bathrooms, area } = req.body
-  const property = new Property({ title, description, address, city, price, rent, bedrooms, bathrooms, area, propertyNumber: 0 });
+  const { title, description, address, city, price, rent, bedrooms, bathrooms, area, type, status } = req.body
+  const property = new Property({ title, description, address, city, price, rent, bedrooms, bathrooms, area, propertyNumber: 0 , type, status});
 
   try {
     const savedProperty = await property.save();
@@ -71,6 +71,8 @@ const createProperty = async (req, res) => {
       newProperty.bathrooms = savedProperty.bathrooms;
       newProperty.area = savedProperty.area;
       newProperty.propertyNumber = lastValue;
+      newProperty.type = savedProperty.type;
+      newProperty.status = savedProperty.status;
 
       // Save the updated newProperty
       const savedProperty2 = await newProperty.save();
